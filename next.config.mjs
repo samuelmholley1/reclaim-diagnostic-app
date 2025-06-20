@@ -5,14 +5,13 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // This applies to all pages in your Vercel app
+        // Apply these headers to all routes in your application.
         source: '/:path*',
         headers: [
           {
             key: 'Content-Security-Policy',
-            // This is the crucial line. It tells browsers to ONLY allow framing 
-            // from your Wix site and any *.wix.com domain (for the editor).
-            value: "frame-ancestors 'self' https://www.samuelholley.com https://*.wix.com;",
+            // UPDATED: Added *.wixstudio.com to be safe
+            value: "frame-ancestors 'self' https://www.samuelholley.com https://*.wix.com https://*.wixstudio.com;",
           }
         ],
       },
