@@ -28,6 +28,8 @@ export default function AssessmentPage() {
   };
 
   const handleAnswerSelect = (questionName, answer) => {
+    console.log("[handleAnswerSelect] Received questionName:", questionName); // Log incoming questionName
+    console.log("[handleAnswerSelect] Received answer:", answer); // Log incoming answer
     const updatedAnswers = { ...userAnswers, [questionName]: answer };
     setUserAnswers(updatedAnswers);
 
@@ -77,4 +79,4 @@ export default function AssessmentPage() {
       </div>
     </main>
   );
-}
+  
