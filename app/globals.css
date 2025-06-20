@@ -1,0 +1,42 @@
+/* app/globals.css */
+
+/* 
+  This is where we import the foundational "layers" of Tailwind CSS. 
+  It tells the browser how to apply Tailwind's utility classes. 
+  These are required for Tailwind to function correctly.
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  This is where we can define base styles for our entire application.
+  It's good practice to set a default background color and text color
+  on the body to ensure consistency.
+*/
+body {
+  background-color: #F8FAFC; /* Your brand-background */
+  color: #4A5568;          /* Your brand-text-secondary */
+  font-family: 'Inter', sans-serif; /* A professional, modern default font */
+}
+
+/* 
+  Optionally, we can set default styles for headings to ensure
+  they always use your primary brand color.
+*/
+h1, h2, h3, h4, h5, h6 {
+  color: #1A365D;          /* Your brand-text-primary */
+}
+
+/* 
+  This is a small utility class I included in one of the components.
+  Adding it here ensures it's available everywhere.
+*/
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
