@@ -100,7 +100,15 @@ export default function AssessmentPage() {
     if (questionNameFromComponent === QUESTION_NAME_TRIAGE_Q1_SCOPE) {
       if (answerFromComponent === ANSWER_Q1_A_JUST_FOR_ME) {
         console.log(`[handleAnswerSelect] Q1 Answer is '${ANSWER_Q1_A_JUST_FOR_ME}'. Path A. Looking for: '${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}'`);
-        nextQuestion = questions.find(q => q.fields?.questionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL);
+        nextQuestion = questions.find(q => {
+  const currentIterationQuestionName = q.fields?.questionName;
+  const isMatch = currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL;
+  if (currentIterationQuestionName && currentIterationQuestionName.includes('Q2a')) { // Log only for Q2a to reduce noise
+    console.log(`[find Q2a] Comparing: "${currentIterationQuestionName}" (length ${currentIterationQuestionName.length}) with "${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}" (length ${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL.length}). Match: ${isMatch}`);
+  }
+  return isMatch;
+});
+
       } else {
         console.log(`[handleAnswerSelect] Q1 Answer is NOT '${ANSWER_Q1_A_JUST_FOR_ME}'. Path B. Looking for: '${QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL}'`);
         nextQuestion = questions.find(q => q.fields?.questionName === QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL);
