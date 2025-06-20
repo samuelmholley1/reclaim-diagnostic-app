@@ -65,7 +65,6 @@ export default function AssessmentPage() {
       setGameState('error');
       return;
     }
-    // Find the first question by its defined constant name
     const firstQuestion = questions.find(q => q.fields?.questionName === QUESTION_NAME_TRIAGE_Q1_SCOPE);
     if (firstQuestion) {
       console.log('[handleStart] Setting first question:', firstQuestion.fields.questionName);
@@ -101,26 +100,23 @@ export default function AssessmentPage() {
       if (answerFromComponent === ANSWER_Q1_A_JUST_FOR_ME) {
         console.log(`[handleAnswerSelect] Q1 Answer is '${ANSWER_Q1_A_JUST_FOR_ME}'. Path A. Looking for: '${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}'`);
         nextQuestion = questions.find(q => {
-  const currentIterationQuestionName = q.fields?.questionName;
-  const isMatch = currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL;
-  if (currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL || (currentIterationQuestionName && currentIterationQuestionName.includes('Q2a'))) {
+          const currentIterationQuestionName = q.fields?.questionName;
+          const isMatch = currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL;
+          // Log details if the current iteration is the one we're targeting or contains 'Q2a'
+          if (currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL || (currentIterationQuestionName && currentIterationQuestionName.includes('Q2a'))) {
             console.log(`[find Q2a path] Iterating. currentIterationQuestionName: "${currentIterationQuestionName}" (type: ${typeof currentIterationQuestionName}, length: ${currentIterationQuestionName?.length})`);
             console.log(`[find Q2a path] Comparing with target: "${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}" (type: ${typeof QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}, length: ${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL?.length})`);
             console.log(`[find Q2a path] Is exact match?: ${isMatch}`);
           }
           return isMatch;
         });
-    console.log(`[find Q2a] Comparing: "${currentIterationQuestionName}" (length ${currentIterationQuestionName.length}) with "${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}" (length ${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL.length}). Match: ${isMatch}`);
-  }
-  return isMatch;
-});
-
       } else {
         console.log(`[handleAnswerSelect] Q1 Answer is NOT '${ANSWER_Q1_A_JUST_FOR_ME}'. Path B. Looking for: '${QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL}'`);
+        // For Path B, if it also fails, similar detailed logging would be added here for QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL
         nextQuestion = questions.find(q => q.fields?.questionName === QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL);
       }
     }
-    // --- Path A Logic ---
+    // --- Path A Logic (Continues from Q2A) ---
     else if (questionNameFromComponent === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL) {
       console.log(`[handleAnswerSelect] Path A from '${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}'. Looking for: '${QUESTION_NAME_TRIAGE_Q3A_AI_EXPERIENCE_INDIVIDUAL}'`);
       nextQuestion = questions.find(q => q.fields?.questionName === QUESTION_NAME_TRIAGE_Q3A_AI_EXPERIENCE_INDIVIDUAL);
@@ -137,7 +133,7 @@ export default function AssessmentPage() {
       console.log(`[handleAnswerSelect] Path A from '${QUESTION_NAME_QUALITATIVE_Q1A_SOUL_QUESTION_INDIVIDUAL}'. End of Path A.`);
       nextQuestion = null;
     }
-    // --- Path B Logic ---
+    // --- Path B Logic (Continues from Q2B) ---
     else if (questionNameFromComponent === QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL) {
       console.log(`[handleAnswerSelect] Path B from '${QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL}'. Looking for: '${QUESTION_NAME_TRIAGE_Q3B_AI_EXPERIENCE_TEAM}'`);
       nextQuestion = questions.find(q => q.fields?.questionName === QUESTION_NAME_TRIAGE_Q3B_AI_EXPERIENCE_TEAM);
