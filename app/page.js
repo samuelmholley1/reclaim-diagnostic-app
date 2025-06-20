@@ -103,7 +103,13 @@ export default function AssessmentPage() {
         nextQuestion = questions.find(q => {
   const currentIterationQuestionName = q.fields?.questionName;
   const isMatch = currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL;
-  if (currentIterationQuestionName && currentIterationQuestionName.includes('Q2a')) { // Log only for Q2a to reduce noise
+  if (currentIterationQuestionName === QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL || (currentIterationQuestionName && currentIterationQuestionName.includes('Q2a'))) {
+            console.log(`[find Q2a path] Iterating. currentIterationQuestionName: "${currentIterationQuestionName}" (type: ${typeof currentIterationQuestionName}, length: ${currentIterationQuestionName?.length})`);
+            console.log(`[find Q2a path] Comparing with target: "${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}" (type: ${typeof QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}, length: ${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL?.length})`);
+            console.log(`[find Q2a path] Is exact match?: ${isMatch}`);
+          }
+          return isMatch;
+        });
     console.log(`[find Q2a] Comparing: "${currentIterationQuestionName}" (length ${currentIterationQuestionName.length}) with "${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL}" (length ${QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL.length}). Match: ${isMatch}`);
   }
   return isMatch;
