@@ -11,7 +11,7 @@ import ThankYouScreen from '../components/ThankYouScreen';
 // NOTE: All hyphens have been changed to en dashes (–) based on observed Contentful data.
 // VERIFY THESE EXACT STRINGS AGAINST YOUR CONTENTFUL ENTRIES.
 
-const QUESTION_NAME_TRIAGE_Q1_SCOPE = 'Triage Q1 – Scope';
+const QUESTION_NAME_TRIAGE_Q1_SCOPE = 'Triage Q1 - Scope';
 const ANSWER_Q1_A_JUST_FOR_ME = 'A) Just for me.'; // This must match the exact answer option string for Q1
 
 const QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL = 'Triage Q2a – Individual Goal';
