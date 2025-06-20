@@ -1,23 +1,19 @@
 // next.config.mjs
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
     return [
       {
-        // This rule applies to all pages of your Vercel app
+        // This applies to all pages in your Vercel app
         source: '/:path*',
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'ALLOW-FROM https://www.samuelholley.com/', // Allow iFraming from your Wix domain
-            // A more modern approach would be to remove X-Frame-Options
-            // and use Content-Security-Policy instead, but let's try this first for simplicity.
-          },
-          // If you want to be more modern and secure (RECOMMENDED LATER, but more complex to get right initially):
-          // {
-          //   key: 'Content-Security-Policy',
-          //   value: "frame-ancestors 'self' https://www.samuelholley.com https://*.wix.com;",
-          // }
+            key: 'Content-Security-Policy',
+            // This is the crucial line. It tells browsers to ONLY allow framing 
+            // from your Wix site and any *.wix.com domain (for the editor).
+            value: "frame-ancestors 'self' https://www.samuelholley.com https://*.wix.com;",
+          }
         ],
       },
     ];
