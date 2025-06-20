@@ -14,20 +14,20 @@ import ThankYouScreen from '../components/ThankYouScreen';
 const QUESTION_NAME_TRIAGE_Q1_SCOPE = 'Triage Q1 - Scope';
 const ANSWER_Q1_A_JUST_FOR_ME = 'A) Just for me.'; // This must match the exact answer option string for Q1
 
-const QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL = 'Triage Q2a – Individual Goal';
-const QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL = 'Triage Q2b – Team Goal';
+const QUESTION_NAME_TRIAGE_Q2A_INDIVIDUAL_GOAL = 'Triage Q2a - Individual Goal';
+const QUESTION_NAME_TRIAGE_Q2B_TEAM_GOAL = 'Triage Q2b - Team Goal';
 
-const QUESTION_NAME_TRIAGE_Q3A_AI_EXPERIENCE_INDIVIDUAL = 'Triage Q3a – AI Experience (Individual)';
-const QUESTION_NAME_TRIAGE_Q3B_AI_EXPERIENCE_TEAM = 'Triage Q3b – AI Experience (Team)';
+const QUESTION_NAME_TRIAGE_Q3A_AI_EXPERIENCE_INDIVIDUAL = 'Triage Q3a - AI Experience (Individual)';
+const QUESTION_NAME_TRIAGE_Q3B_AI_EXPERIENCE_TEAM = 'Triage Q3b - AI Experience (Team)';
 
-const QUESTION_NAME_TRIAGE_Q4A_PSYCHOLOGICAL_READINESS_INDIVIDUAL = 'Triage Q4a – Psychological Readiness (Individual)';
-const QUESTION_NAME_TRIAGE_Q4B_PSYCHOLOGICAL_READINESS_TEAM = 'Triage Q4b – Psychological Readiness (Team)';
+const QUESTION_NAME_TRIAGE_Q4A_PSYCHOLOGICAL_READINESS_INDIVIDUAL = 'Triage Q4a - Psychological Readiness (Individual)';
+const QUESTION_NAME_TRIAGE_Q4B_PSYCHOLOGICAL_READINESS_TEAM = 'Triage Q4b - Psychological Readiness (Team)';
 
-const QUESTION_NAME_TRIAGE_Q5A_LEARNING_ORIENTATION_INDIVIDUAL = 'Triage Q5a – Learning Orientation (Individual)';
-const QUESTION_NAME_TRIAGE_Q5B_LEARNING_ORIENTATION_TEAM = 'Triage Q5b – Learning Orientation (Team)';
+const QUESTION_NAME_TRIAGE_Q5A_LEARNING_ORIENTATION_INDIVIDUAL = 'Triage Q5a - Learning Orientation (Individual)';
+const QUESTION_NAME_TRIAGE_Q5B_LEARNING_ORIENTATION_TEAM = 'Triage Q5b - Learning Orientation (Team)';
 
-const QUESTION_NAME_QUALITATIVE_Q1A_SOUL_QUESTION_INDIVIDUAL = 'Qualitative Q1a – The Soul Question (Individual)';
-const QUESTION_NAME_QUALITATIVE_Q1B_SOUL_QUESTION_TEAM = 'Qualitative Q1b – The Soul Question (Team)';
+const QUESTION_NAME_QUALITATIVE_Q1A_SOUL_QUESTION_INDIVIDUAL = 'Qualitative Q1a - The Soul Question (Individual)';
+const QUESTION_NAME_QUALITATIVE_Q1B_SOUL_QUESTION_TEAM = 'Qualitative Q1b - The Soul Question (Team)';
 // --- End Constants ---
 
 export default function AssessmentPage() {
