@@ -1,3 +1,21 @@
+// File: app/page.js
+
+import QuizAndSubmit from '../components/QuizAndSubmit'; // 1. Add this import at the top
+
+export default function Home() { // Or whatever your function is named
+  // 2. Replace the existing return statement with this one
+  return (
+    <main>
+      <h1>Reclaim Diagnostic</h1>
+      <p>Please fill out your information and answer the questions below.</p>
+      
+      {/* This is where your new, combined component will render */}
+      <QuizAndSubmit />
+      
+    </main>
+  );
+}
+
 'use client'; // This enables interactivity
 
 import { useState, useEffect } from 'react';
