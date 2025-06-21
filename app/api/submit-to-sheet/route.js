@@ -1,134 +1,88 @@
-// File: components/DiagnosticForm.js (or wherever your main quiz component is)
+// File: app/api/submit-to-sheet/route.js
+// This is BACKEND code. It runs on the server and talks to Google.
+// It CANNOT use React hooks like useState.
 
-import { useState } from 'react';
+import { google } from 'googleapis';
+import { NextResponse } from 'next/server';
 
 /**
- * This component collects all client and diagnostic data and submits it to the backend API.
+ * This function handles POST requests to send data to a Google Sheet.
  */
-export default function DiagnosticForm() {
-  // State to hold all the answers. The keys MUST EXACTLY MATCH your Google Sheet headers.
-  const [answers, setAnswers] = useState({
-    'Client Name': '',
-    'Website URL': '',
-    'Question 1': '',
-    'Question 2a': '',
-    'Question 2b': '',
-    'Question 3a': '',
-    'Question 3b': '',
-    'Question 4a': '',
-    'Question 4b': '',
-    'Question 5a': '',
-    'Question 5b': '',
-    'Question 6a': '',
-    'Question 6b': '',
-  });
+export async function POST(request) {
+  // --- 1. VALIDATE ENVIRONMENT VARIABLES ---
+  const {
+    GOOGLE_CLIENT_EMAIL,
+    GOOGLE_PRIVATE_KEY,
+    GOOGLE_SHEET_ID,
+  } = process.env;
 
-  // State to manage the submission status for user feedback
-  const [status, setStatus] = useState(''); // e.g., 'Submitting...', 'Success!', 'Error'
+  if (!GOOGLE_CLIENT_EMAIL || !GOOGLE_PRIVATE_KEY || !GOOGLE_SHEET_ID) {
+    console.error("ERROR: Missing Google service account credentials or Sheet ID in .env");
+    return NextResponse.json(
+      { message: "Server configuration error. Required environment variables are missing." },
+      { status: 500 }
+    );
+  }
 
-const columnOrder = [
-  'Client Name', 
-  'Website URL', 
-  'Question 1',
-  'Question 2a',
-  'Question 2b',
-  'Question 3a',
-  'Question 3b',
-  'Question 4a',
-  'Question 4b',
-  'Question 5a',
-  'Question 5b',
-  'Question 6a',
-  'Question 6b',
-];
-  
-  /**
-   * A single handler to update our state object for any input field.
-   */
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAnswers(prevAnswers => ({
-      ...prevAnswers,
-      [name]: value,
-    }));
-  };
-  
-  /**
-   * This function is called when the user submits the form.
-   */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('Submitting...');
+  try {
+    // --- 2. PARSE INCOMING REQUEST BODY ---
+    const requestBody = await request.json();
+    const { userAnswersObject } = requestBody;
 
-    if (!answers['Client Name'] || !answers['Website URL']) {
-      setStatus('Error: Please fill in the client name and website URL.');
-      return;
+    if (!userAnswersObject || typeof userAnswersObject !== 'object') {
+      return NextResponse.json(
+        { message: "Bad Request: 'userAnswersObject' is missing or not a valid object." },
+        { status: 400 }
+      );
     }
 
-    try {
-      const response = await fetch('/api/submit-to-sheet', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userAnswersObject: answers
-        }),
-      });
+    // --- 3. AUTHENTICATE WITH GOOGLE SHEETS API ---
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: GOOGLE_CLIENT_EMAIL,
+        private_key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
 
-      if (response.ok) {
-        setStatus('Success! Your results have been submitted.');
-      } else {
-        const errorData = await response.json();
-        setStatus(`Error: ${errorData.message}`);
-        console.error('Submission failed:', errorData);
-      }
-    } catch (error) {
-      setStatus('Error: A network error occurred. Please try again.');
-      console.error('Network error:', error);
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    // --- 4. PREPARE DATA FOR THE SPREADSHEET ---
+    // Dynamically get the headers from the incoming object keys
+    // This makes it more flexible than a fixed array.
+    const headers = Object.keys(userAnswersObject);
+    const newRow = headers.map(header => userAnswersObject[header] || ""); // Map values in order
+
+    // Create a server-side timestamp and add it to the front.
+    const timestamp = new Date().toISOString();
+    const rowWithTimestamp = [timestamp, ...newRow];
+
+
+    // --- 5. APPEND DATA TO THE GOOGLE SHEET ---
+    const response = await sheets.spreadsheets.values.append({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: 'Sheet1!A1', // Appends after the last row in Sheet1
+      valueInputOption: 'USER_ENTERED',
+      resource: {
+        values: [rowWithTimestamp],
+      },
+    });
+
+    // --- 6. RETURN SUCCESS RESPONSE ---
+    return NextResponse.json(
+      { message: "Data successfully submitted." },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    // --- 7. HANDLE ERRORS GRACEFULLY ---
+    console.error("[API_ERROR]", error.message);
+    if (error instanceof SyntaxError) {
+      return NextResponse.json({ message: "Bad Request: Invalid JSON." }, { status: 400 });
     }
-  };
-
-  // Helper function to create input fields, reducing repetition
-  const createInputField = (name, type = 'text') => (
-    <div style={{ marginBottom: '1rem' }}>
-      <label htmlFor={name}>{name}:</label>
-      <input
-        type={type}
-        id={name}
-        name={name} // This 'name' MUST match a key in the 'answers' state
-        value={answers[name]}
-        onChange={handleInputChange}
-        required={name === 'Client Name' || name === 'Website URL'}
-        style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-      />
-    </div>
-  );
-
-  return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h2>Client Information</h2>
-      {createInputField('Client Name')}
-      {createInputField('Website URL', 'url')}
-
-      <h2>Diagnostic Questions</h2>
-      {createInputField('Question 1')}
-      {createInputField('Question 2a')}
-      {createInputField('Question 2b')}
-      {createInputField('Question 3a')}
-      {createInputField('Question 3b')}
-      {createInputField('Question 4a')}
-      {createInputField('Question 4b')}
-      {createInputField('Question 5a')}
-      {createInputField('Question 5b')}
-      {createInputField('Question 6a')}
-      {createInputField('Question 6b')}
-      
-      <button type="submit" disabled={status === 'Submitting...'}>
-        {status === 'Submitting...' ? 'Submitting...' : 'Submit Results'}
-      </button>
-
-      {status && <p>{status}</p>}
-    </form>
-  );
+    return NextResponse.json(
+      { message: "An internal server error occurred." },
+      { status: 500 }
+    );
+  }
 }
